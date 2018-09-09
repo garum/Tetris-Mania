@@ -73,7 +73,7 @@ function checkCollision(player,gameBoard){
 function resetPlayer()
 {
     player.position={'x':boardWeight/2,'y':0};
-    key=Math.floor(Math.random()*5);
+    key=Math.floor(Math.random()*7);
     getRandomTetrimon(key);
   
 }
@@ -89,6 +89,10 @@ function playerGravity(){
     if(collided){
         merge(player,gameBoard);
         resetPlayer();
+        if(checkCollision(player,gameBoard))
+        {
+            resetGameBoard();
+        }
     }
 
 }
@@ -247,9 +251,35 @@ function getRandomTetrimon(key){
         player.color='#6600CC';
         
     }
+    if(key==5){
+        player.matrix=[
+            [0,0,0],
+            [1,1,0],
+            [0,1,1]
+        ];
+        player.color='#E0820F';
+    }
+    if(key==6){
+        player.matrix=[
+            [1,0,0],
+            [1,0,0],
+            [1,1,0]
+        ];
+        player.color='#131CD3';
+    }
+        
 
 }
 
+function resetGameBoard()
+{
+    for(let i=0;i<gameBoard.length;i++)
+        gameBoard[i]=new Array(boardWeight).fill(10);
+}
 
+resetPlayer();
 update();
+    
+
+
 

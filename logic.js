@@ -5,7 +5,7 @@ const context=canvas.getContext('2d');
 const boardHeight=22;
 const boardWeight=10;
 const nrPixel=24;
-
+var score =0;
 var gameBoard=creatMatrix(boardHeight,boardWeight);
 context.fillStyle="#000";
 context.fillRect(0,0,canvas.width,canvas.height);
@@ -92,6 +92,7 @@ function playerGravity(){
         if(checkCollision(player,gameBoard))
         {
             resetGameBoard();
+            score=0;
         }
     }
 
@@ -166,7 +167,7 @@ function removeRow(gameBoard,row){
 }
 
 function lineSweep(gameBoard){  
-
+    var line=0;
     for(let i=gameBoard.length-1; i>=0;i--){
         var full=true;
         for(let j=0;j<gameBoard[0].length;j++) {
@@ -176,8 +177,11 @@ function lineSweep(gameBoard){
 
         if(full){
             removeRow(gameBoard,i);
+            line++
         }
     }
+
+    score+=line*line*100;
             
 }
 var tick=0;
@@ -186,6 +190,7 @@ function update(){
     tick++;
     if(tick>13){
         // update  movement of the player
+        updateScore(); 
         playerGravity();
         lineSweep(gameBoard);
         tick=0;
@@ -197,8 +202,10 @@ function update(){
 }
 
 document.addEventListener("keydown",event => {
-        if(event.keyCode==40)
+        if(event.keyCode==40){
+            score++;
             playerGravity();
+        }
         if(event.keyCode==37)
             playerMove(-1);
         if(event.keyCode==39)
@@ -271,15 +278,20 @@ function getRandomTetrimon(key){
 
 }
 
-function resetGameBoard()
-{
+function resetGameBoard(){
     for(let i=0;i<gameBoard.length;i++)
         gameBoard[i]=new Array(boardWeight).fill(10);
 }
 
+function updateScore(){
+    var label=document.getElementById("score-container");
+    label.textContent = "Score: "+ score;
+}
+
+
 resetPlayer();
 update();
-    
+   
 
 
 
